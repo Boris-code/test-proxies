@@ -21,7 +21,7 @@ def test(*, proxies_name, proxies_url):
     success_count = []
     exception_count = []
     spend_time = []
-    one_proxy_test_times = 1  # 每个代理请求的次数
+    one_proxy_test_times = 10  # 每个代理请求的次数
 
     def start_request(proxies):
         for i in range(one_proxy_test_times):
@@ -58,7 +58,7 @@ def test(*, proxies_name, proxies_url):
         并发总请求次数 = {total_count * one_proxy_test_times}
         请求成功 = {sum(success_count)}
         请求异常 = {sum(exception_count)}
-        平均耗时 = {sum(spend_time) / total_count * one_proxy_test_times}
+        平均耗时 = {sum(spend_time) / (total_count * one_proxy_test_times)}
     """
     )
 
@@ -71,5 +71,5 @@ if __name__ == "__main__":
     # )
     test(
         proxies_name="品赞",
-        proxies_url="https://service.ipzan.com/core-extract?num=50&no=20211015780077026986&minute=1&repeat=1&pool=ordinary&mode=whitelist&secret=f2fqhitk8",
+        proxies_url="https://service.ipzan.com/core-extract?num=50&no=20221210531786551545&minute=1&pool=quality&mode=whitelist&secret=c52dtaun6pefvg",
     )

@@ -20,27 +20,26 @@ def test(*, proxies_name, proxies_url):
     total_count = 0
     success_count = []
     exception_count = []
-    avg_spend_time = []
+    spend_time = []
+    one_proxy_test_times = 1  # 每个代理请求的次数
 
     def start_request(proxies):
-        start_time = time.time()
-        try:
-            response = requests.get(
-                "https://www.baidu.com", proxies=proxies, timeout=20
-            )
-            print(proxies, response)
-            # response = requests.get('http://icanhazip.com', proxies=proxies, timeout=20)
-            # print(proxies, response.text)
-            spend_time = time.time() - start_time
-            success_count.append(1)
-            avg_spend_time.append(spend_time)
+        for i in range(one_proxy_test_times):
+            start_time = time.time()
+            try:
+                response = requests.get(
+                    "https://www.baidu.com", proxies=proxies, timeout=20
+                )
+                print(proxies, response)
+                # response = requests.get('http://icanhazip.com', proxies=proxies, timeout=20)
+                # print(proxies, response.text)
+                success_count.append(1)
+                spend_time.append(time.time() - start_time)
 
-        except Exception as e:
-            print("{} 请求异常".format(proxy), e)
-            exception_count.append(1)
-
-            spend_time = time.time() - start_time
-            avg_spend_time.append(spend_time)
+            except Exception as e:
+                print("{} 请求异常".format(proxy), e)
+                exception_count.append(1)
+                spend_time.append(time.time() - start_time)
 
     threads = []
     for proxy in get_proxies(proxies_url):
@@ -56,16 +55,21 @@ def test(*, proxies_name, proxies_url):
         f"""
         代理 {proxies_name} 请求百度测试
         代理总数 = {total_count}
+        并发总请求次数 = {total_count * one_proxy_test_times}
         请求成功 = {sum(success_count)}
         请求异常 = {sum(exception_count)}
-        平均耗时 = {sum(avg_spend_time) / total_count}
+        平均耗时 = {sum(spend_time) / total_count * one_proxy_test_times}
     """
     )
 
 
 if __name__ == "__main__":
     # proxies_url 提取的代理使用\r\n分割
+    # test(
+    #     proxies_name="shenlong",
+    #     proxies_url="http://api.shenlongip.com/ip?key=7y63d77w&pattern=txt&count=50&protocol=2",
+    # )
     test(
-        proxies_name="shenlong",
-        proxies_url="http://api.shenlongip.com/ip?key=7y63d77w&pattern=txt&count=50&protocol=2",
+        proxies_name="品赞",
+        proxies_url="https://service.ipzan.com/core-extract?num=50&no=20211015780077026986&minute=1&repeat=1&pool=ordinary&mode=whitelist&secret=f2fqhitk8",
     )
